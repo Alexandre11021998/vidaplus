@@ -1,10 +1,9 @@
-import { PrismaClient } from "../app/generated/prisma";
+import { PrismaClient } from "../app/generated/prisma/index.js";
 
 const prisma = new PrismaClient();
 
 async function seedDatabase() {
     try {
-        // Números de telefones de hospitais
         const phones = [
             ["(41) 1234-5678", "(41) 9876-5432"],
             ["(41) 2345-6789", "(41) 9012-3456"],
@@ -17,6 +16,7 @@ async function seedDatabase() {
             ["(41) 9012-5678", "(41) 3210-9876"],
             ["(41) 9876-1234", "(41) 6543-0987"],
         ];
+
         const images = [
             "https://i0.wp.com/revistaampla.com.br/wp-content/uploads/2024/03/unimed-fatima-divulgacao-960x540-1.jpg?resize=696%2C464&ssl=1",
             "https://portalhospitaisbrasil.com.br/wp-content/uploads/2023/08/Hospital-Santa-Cruz.jpg",
@@ -28,23 +28,13 @@ async function seedDatabase() {
             "https://hnsg.org.br/wp-content/uploads/2019/12/img_9129.jpg",
             "https://pbs.twimg.com/profile_images/461144789270798337/RHvgj_9-_400x400.png",
             "https://servicos.nc.ufpr.br/PortalNC/painel/assets/img/logos/logo_hc.png",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNqB-S5dVlDkoYOCUyj-JigB08ugDL3ilIag&s",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoz_iHIKjb-zbGtBENhl8MXpQfATABkfnrvw&s",
-            "https://immef.com.br/wp-content/uploads/2017/06/ultrassonografia-obstetrica-tridimensional-em-tempo-real-4d-555x367.jpg",
-            "https://drapaulaazevedodermato.com.br/novo-2023/wp-content/uploads/2024/07/dermatologista-em-goiania-dra-paula-azevedo-blog-dra-paula-azevedo.jpg",
-            "https://fiesc.com.br/sites/default/files/styles/800x533/public/galeria/2024-03/covid-still-life-with-vaccine.jpg?itok=QnSKwasL",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReMNdSrlC4WIRylfGlN8n6YsdABdpU_xcM5Q&s",
-            "https://cetic.br/media/imgs/tic/TICsaude-big.jpg",
-            "https://blog-prd.portalpos.com.br/wp-content/uploads/2022/04/saude-publica-familia-pos-graduacao.jpg",
-            "https://wordpress-cms-mv-prod-assets.quero.space/uploads/2019/02/team-doctors-ready-take-care-people-who-are-sick-with-covid-19-hospital.jpg",
-            "https://ih1.redbubble.net/image.587031291.6209/flat,750x,075,f-pad,750x1000,f8f8f8.u4.jpg",
         ];
-        // Nomes de hospitais
+
         const creativeNames = [
             "Hospital Nossa Senhora de Fátima",
             "Hospital Santa Cruz",
             "Hospital Santa Casa",
-            "Hospital Pequeno Principe",
+            "Hospital Pequeno Príncipe",
             "Hospital Erasto Gaertner",
             "Hospital São Vicente",
             "Hospital das Nações",
@@ -53,7 +43,6 @@ async function seedDatabase() {
             "Hospital das Clínicas",
         ];
 
-        // Endereços de hospitais
         const addresses = [
             "Avenida Visconde de Guarapuava, 3077 – Centro, Curitiba – PR",
             "Rua Batel, 1889 – Batel, Curitiba – PR",
@@ -118,47 +107,47 @@ async function seedDatabase() {
             },
         ];
 
-        // Criar 10 hospitais com nomes e endereços
-        const barbershops = [];
+        const hospitals = [];
+
         for (let i = 0; i < 10; i++) {
             const name = creativeNames[i];
             const address = addresses[i];
             const imageUrl = images[i];
-            const barbershopPhones = phones[i];
+            const hospitalPhones = phones[i];
 
-            const barbershop = await prisma.barbershop.create({
+            const createdHospital = await prisma.hospital.create({
                 data: {
                     name,
                     address,
-                    imageUrl: imageUrl,
+                    imageUrl,
                     description: "Descrição padrão para a hospital.",
-                    phones: barbershopPhones,
+                    phones: hospitalPhones,
                 },
             });
 
             for (const service of services) {
-                await prisma.barbershopService.create({
+                await prisma.hospitalService.create({
                     data: {
                         name: service.name,
                         description: service.description,
                         price: service.price,
-                        barbershop: {
-                            connect: {
-                                id: barbershop.id,
-                            },
+                        hospital: {
+                            // corrigido de "barbershop"
+                            connect: { id: createdHospital.id },
                         },
                         imageUrl: service.imageUrl,
                     },
                 });
             }
 
-            barbershops.push(barbershop);
+            hospitals.push(createdHospital);
         }
 
-        // Fechar a conexão com o banco de dados
-        await prisma.$disconnect();
+        console.log("🌱 Seed finalizado com sucesso.");
     } catch (error) {
-        console.error("Erro ao criar as hospitais:", error);
+        console.error("Erro ao executar o seed:", error);
+    } finally {
+        await prisma.$disconnect();
     }
 }
 

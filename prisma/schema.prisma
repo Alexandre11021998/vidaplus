@@ -8,6 +8,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Hospital {
+  id          Int                @id @default(autoincrement())
+  name        String
+  address     String
+  imageUrl    String
+  description String
+  phones      String[]          @db.VarChar(20)
+  services    HospitalService[]
+}
+
+model HospitalService {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  price       Float
+  imageUrl    String
+  hospitalId  Int
+  hospital    Hospital @relation(fields: [hospitalId], references: [id])
+}
+
+
 model User {
   id_usuario   Int           @id @default(autoincrement())
   tipo         TipoUser

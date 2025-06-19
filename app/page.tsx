@@ -6,8 +6,13 @@ import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { db } from "./lib/prisma";
+import HospitalItem from "./components/ui/hospital-item";
 
-const Home = () => {
+const Home = async () => {
+    //chamar banco de dados
+    const Hospital = await db.hospital.findMany({});
+
     return (
         <div>
             {/*Cabeçalho*/}
@@ -36,7 +41,10 @@ const Home = () => {
                     />
                 </div>
                 {/* Agendamentos*/}
-                <Card className="mt-6">
+                <h2 className=" mt-6 mb-3text-xs font-bold uppercase text-gray-400">
+                    Agendamentos
+                </h2>
+                <Card>
                     <CardContent className="flex justify-between p-0">
                         {/*Esquerda */}
                         <div className="flex flex-col gap-2 py-5 pl-5">
@@ -58,6 +66,13 @@ const Home = () => {
                         </div>
                     </CardContent>
                 </Card>
+                <h2 className="mt-6 mb-3 text-xs font-bold uppercase text-gray-400">
+                    Recomendados
+                </h2>
+
+                {Hospital.map((hospital) => (
+                    <HospitalItem key={hospital.id} hospital={hospital} />
+                ))}
             </div>
         </div>
     );
