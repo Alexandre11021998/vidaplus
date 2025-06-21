@@ -31,6 +31,67 @@ const Home = async () => {
                     </Button>
                 </div>
 
+                {/*BUSCA RÁPIDA */}
+                <div className="flex gap-3 mt-6 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+                    <Button className="gap-2" variant="secondary">
+                        <Image
+                            src="consulta.svg"
+                            width={16}
+                            height={16}
+                            alt="Consulta"
+                        />
+                        Consultas
+                    </Button>
+
+                    <Button className="gap-2" variant="secondary">
+                        <Image
+                            src="exames.svg"
+                            width={16}
+                            height={16}
+                            alt="Exames"
+                        />
+                        Exames
+                    </Button>
+
+                    <Button className="gap-2" variant="secondary">
+                        <Image
+                            src="vacinas.svg"
+                            width={16}
+                            height={16}
+                            alt="Vacinas"
+                        />
+                        Vacinas
+                    </Button>
+
+                    <Button className="gap-2" variant="secondary">
+                        <Image
+                            src="ultrasom.svg"
+                            width={16}
+                            height={16}
+                            alt="Ultrasom"
+                        />
+                        Ultrasom
+                    </Button>
+                    <Button className="gap-2" variant="secondary">
+                        <Image
+                            src="examesangue.svg"
+                            width={16}
+                            height={16}
+                            alt="ExameDeSangue"
+                        />
+                        Exame de Sangue
+                    </Button>
+                    <Button className="gap-2" variant="secondary">
+                        <Image
+                            src="eletrocardio.svg"
+                            width={16}
+                            height={16}
+                            alt="Eletrocardio"
+                        />
+                        Eletrocardiograma
+                    </Button>
+                </div>
+
                 {/*Banner*/}
                 <div className="relative w-full aspect-[2/1] mt-6">
                     <Image
@@ -76,6 +137,17 @@ const Home = async () => {
                     ))}
                 </div>
             </div>
+            <footer>
+                <Card>
+                    <CardContent className="px-5 py-6">
+                        <p className="text-sm text-gray-400">
+                            © 2025 <span className="font-bold">VidaPlus</span>.
+                            Desenvolvido por Alexandre Vinicius Costa como parte
+                            de projeto acadêmico.
+                        </p>
+                    </CardContent>
+                </Card>
+            </footer>
         </div>
     );
 };
