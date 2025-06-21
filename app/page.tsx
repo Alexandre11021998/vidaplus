@@ -4,10 +4,10 @@ import { Button } from "./components/ui/button";
 import { SearchIcon } from "lucide-react";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { db } from "./lib/prisma";
 import HospitalItem from "./components/ui/hospital-item";
+import { QuickSearchOptions } from "./_constants/search";
+import BookingItem from "./components/ui/booking-item";
 
 const Home = async () => {
     //chamar banco de dados
@@ -33,63 +33,21 @@ const Home = async () => {
 
                 {/*BUSCA RÁPIDA */}
                 <div className="flex gap-3 mt-6 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
-                    <Button className="gap-2" variant="secondary">
-                        <Image
-                            src="consulta.svg"
-                            width={16}
-                            height={16}
-                            alt="Consulta"
-                        />
-                        Consultas
-                    </Button>
-
-                    <Button className="gap-2" variant="secondary">
-                        <Image
-                            src="exames.svg"
-                            width={16}
-                            height={16}
-                            alt="Exames"
-                        />
-                        Exames
-                    </Button>
-
-                    <Button className="gap-2" variant="secondary">
-                        <Image
-                            src="vacinas.svg"
-                            width={16}
-                            height={16}
-                            alt="Vacinas"
-                        />
-                        Vacinas
-                    </Button>
-
-                    <Button className="gap-2" variant="secondary">
-                        <Image
-                            src="ultrasom.svg"
-                            width={16}
-                            height={16}
-                            alt="Ultrasom"
-                        />
-                        Ultrasom
-                    </Button>
-                    <Button className="gap-2" variant="secondary">
-                        <Image
-                            src="examesangue.svg"
-                            width={16}
-                            height={16}
-                            alt="ExameDeSangue"
-                        />
-                        Exame de Sangue
-                    </Button>
-                    <Button className="gap-2" variant="secondary">
-                        <Image
-                            src="eletrocardio.svg"
-                            width={16}
-                            height={16}
-                            alt="Eletrocardio"
-                        />
-                        Eletrocardiograma
-                    </Button>
+                    {QuickSearchOptions.map((options) => (
+                        <Button
+                            key={options.title}
+                            className="gap-2"
+                            variant="secondary"
+                        >
+                            <Image
+                                src={options.imageUrl}
+                                width={16}
+                                height={16}
+                                alt={options.title}
+                            />
+                            {options.title}
+                        </Button>
+                    ))}
                 </div>
 
                 {/*Banner*/}
@@ -102,31 +60,8 @@ const Home = async () => {
                     />
                 </div>
                 {/* Agendamentos*/}
-                <h2 className=" mt-6 mb-3text-xs font-bold uppercase text-gray-400">
-                    Agendamentos
-                </h2>
-                <Card>
-                    <CardContent className="flex justify-between p-0">
-                        {/*Esquerda */}
-                        <div className="flex flex-col gap-2 py-5 pl-5">
-                            <Badge className="w-fit">Confirmado</Badge>
-                            <h3 className="font-semibold">Exame de Sangue</h3>
+                <BookingItem />
 
-                            <div className="flex items-center gap-2">
-                                <Avatar className="h-6 w-6">
-                                    <AvatarImage src="https://portalhospitaisbrasil.com.br/wp-content/uploads/2023/08/Hospital-Santa-Cruz.jpg" />
-                                </Avatar>
-                                <p className="text-sm">Hospital Santa Cruz</p>
-                            </div>
-                        </div>
-                        {/*Direita */}
-                        <div className="flex flex-col items-center justify-center px-5 border-l-2 border-solid">
-                            <p className="text-sm">Junho</p>
-                            <p className="text-2xl">19</p>
-                            <p className="text-sm">15:00</p>
-                        </div>
-                    </CardContent>
-                </Card>
                 <h2 className="mt-6 mb-3 text-xs font-bold uppercase text-gray-400">
                     Recomendados
                 </h2>
