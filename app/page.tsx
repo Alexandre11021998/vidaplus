@@ -70,9 +70,11 @@ const Home = async () => {
                     Recomendados
                 </h2>
 
-                {Hospital.map((hospital) => (
-                    <HospitalItem key={hospital.id} hospital={hospital} />
-                ))}
+                <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
+                    {Hospital.map((hospital) => (
+                        <HospitalItem key={hospital.id} hospital={hospital} />
+                    ))}
+                </div>
             </div>
         </div>
     );
