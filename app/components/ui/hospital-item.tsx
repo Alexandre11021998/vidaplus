@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { StarIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface HospitalItemProps {
     hospital: Hospital;
@@ -39,8 +40,8 @@ const HospitalItem = ({ hospital }: HospitalItemProps) => {
                     <p className="text-sm text-gray-400 truncate">
                         {hospital.address}
                     </p>
-                    <Button variant="secondary" className="w-full mt-3">
-                        Agendar
+                    <Button variant="secondary" className="w-full mt-3" asChild>
+                        <Link href={`/hospital/${hospital.id}`}>Agendar</Link>
                     </Button>
                 </div>
             </CardContent>
