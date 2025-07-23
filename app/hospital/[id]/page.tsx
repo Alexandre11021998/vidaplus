@@ -1,8 +1,10 @@
+import ServiceItem from "@/app/components/ui/service-item";
 import { db } from "@/app/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 interface HospitalPageProps {
     params: {
@@ -16,7 +18,13 @@ const HospitalPage = async ({ params }: HospitalPageProps) => {
         where: {
             id: Number(params.id),
         },
+        include: {
+            services: true, // Assuming you have an image relation
+        },
     });
+
+    if (!hospital) return notFound;
+
     return (
         <div>
             {/*IMAGEM*/}
@@ -57,15 +65,26 @@ const HospitalPage = async ({ params }: HospitalPageProps) => {
 
                 <div className="flex items-center gap-1">
                     <StarIcon className="text-primary fill-primary" />
-                    <p className="text-sm">5,0 (499 avaliações)</p>
+                    <p className="text-sm">5,0 (1.499 avaliações)</p>
                 </div>
             </div>
             {/*DESCRIÇÃO*/}
             <div className="space-y-2 border-b border-solid p-5">
-                <h2 className="text-xs font uppercase text-grey-400">
+                <h2 className="text-xs font-bold uppercase text-grey-400">
                     Sobre nós
                 </h2>
                 <p className="text-justify text-sm">{hospital?.description}</p>
+            </div>
+
+            <div className="space-y-3 p-5">
+                <h2 className="text-xs font-bold uppercase text-gray-400">
+                    Serviços
+                </h2>
+                <div className="space-y-3">
+                    {hospital.services.map((service) => (
+                        <ServiceItem key={service.id} service={service} />
+                    ))}
+                </div>
             </div>
         </div>
     );
