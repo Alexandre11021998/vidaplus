@@ -58,6 +58,11 @@ const nextConfig: NextConfig = {
                 hostname: "servicos.nc.ufpr.br",
                 pathname: "/**",
             },
+            {
+                protocol: "https",
+                hostname: "utfs.httpscom.br",
+                pathname: "/**",
+            },
         ],
     },
 };
