@@ -1,8 +1,17 @@
 import PhoneItem from "@/app/components/ui/phone-item";
 import ServiceItem from "@/app/components/ui/service-item";
+import SidebarSheet from "@/app/components/ui/sidebar-sheet";
+
 import { db } from "@/app/lib/prisma";
 import { Button } from "@/components/ui/button";
-import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from "lucide-react";
+import { SheetTrigger } from "@/components/ui/sheet";
+import {
+    ChevronLeftIcon,
+    MapPinIcon,
+    MenuIcon,
+    Sheet,
+    StarIcon,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -48,13 +57,18 @@ const HospitalPage = async ({ params }: HospitalPageProps) => {
                     </Link>
                 </Button>
 
-                <Button
-                    size="icon"
-                    variant="secondary"
-                    className="absolute right-4 top-4"
-                >
-                    <MenuIcon />
-                </Button>
+                <Sheet>
+                    <SheetTrigger asChild>
+                        <Button
+                            size="icon"
+                            variant="outline"
+                            className="absolute right-4 top-4"
+                        >
+                            <MenuIcon />
+                        </Button>
+                    </SheetTrigger>
+                    <SidebarSheet />
+                </Sheet>
             </div>
 
             <div className="border-b border-solid p-5">

@@ -3,7 +3,7 @@ import Header from "./components/ui/header";
 import { Button } from "./components/ui/button";
 import { SearchIcon } from "lucide-react";
 import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
+
 import { db } from "./lib/prisma";
 import HospitalItem from "./components/ui/hospital-item";
 import { QuickSearchOptions } from "./_constants/search";
@@ -72,17 +72,6 @@ const Home = async () => {
                     ))}
                 </div>
             </div>
-            <footer>
-                <Card>
-                    <CardContent className="px-5 py-6">
-                        <p className="text-sm text-gray-400">
-                            © 2025 <span className="font-bold">VidaPlus</span>.
-                            Desenvolvido por Alexandre Vinicius Costa como parte
-                            de projeto acadêmico.
-                        </p>
-                    </CardContent>
-                </Card>
-            </footer>
         </div>
     );
 };

@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../app/generated/prisma"
 }
 
 datasource db {
@@ -8,118 +7,89 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  bookings      Booking[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
 model Hospital {
-  id          Int                @id @default(autoincrement())
+  id          String            @id @default(uuid())
   name        String
   address     String
-  imageUrl    String
+  phones      String[]
   description String
-  phones      String[]          @db.VarChar(20)
+  imageUrl    String
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
   services    HospitalService[]
 }
 
 model HospitalService {
-  id          Int      @id @default(autoincrement())
+  id          String    @id @default(uuid())
   name        String
   description String
-  price       Float
   imageUrl    String
-  hospitalId  Int
-  hospital    Hospital @relation(fields: [hospitalId], references: [id])
+  price       Decimal   @db.Decimal(10, 2)
+  hospitalId  String
+  hospital    Hospital  @relation(fields: [hospitalId], references: [id])
+  bookings    Booking[]
 }
 
-
-model User {
-  id_usuario   Int           @id @default(autoincrement())
-  tipo         TipoUser
-  login        String        @db.VarChar(50)
-  senha        String        @db.VarChar(50)
-  email        String        @db.VarChar(100)
-  notificacoes Notificacao[]
-  logs         Log[]
-}
-
-model Adm {
-  id_admin Int    @id @default(autoincrement())
-  nome     String @db.VarChar(100)
-  login    String @db.VarChar(50)
-  senha    String @db.VarChar(50)
-}
-
-model Paciente {
-  id_paciente     Int        @id @default(autoincrement())
-  nome            String     @db.VarChar(100)
-  data_nascimento DateTime
-  email           String     @db.VarChar(100)
-  telefone        String     @db.VarChar(15)
-  consultas       Consulta[]
-}
-
-model Profissional {
-  id_profissional Int        @id @default(autoincrement())
-  nome            String
-  especialidade   String     @db.VarChar(100)
-  CRM_COREN       String     @db.VarChar(50)
-  email           String
-  telefone        String     @db.VarChar(15)
-  agendas         Agenda[]
-  consultas       Consulta[]
-}
-
-model Notificacao {
-  id_notificacao Int      @id @default(autoincrement())
-  id_usuario     Int
-  mensagem       String   @db.Text
-  data_envio     DateTime
-  status         String   @db.VarChar(20)
-
-  usuario User @relation(fields: [id_usuario], references: [id_usuario])
-}
-
-model Log {
-  id_log     Int      @id @default(autoincrement())
-  id_usuario Int
-  acao       String   @db.Text
-  data_hora  DateTime @default(now())
-
-  usuario User @relation(fields: [id_usuario], references: [id_usuario])
-}
-
-model Agenda {
-  id_agenda       Int      @id @default(autoincrement())
-  id_profissional Int
-  data            DateTime
-  hora_inicio     DateTime @db.Time(0)
-  hora_fim        DateTime @db.Time(0)
-
-  profissional Profissional @relation(fields: [id_profissional], references: [id_profissional])
-}
-
-model Consulta {
-  id_consulta     Int      @id @default(autoincrement())
-  data            DateTime
-  hora            DateTime @db.Time(0)
-  id_paciente     Int
-  id_profissional Int
-  status          String   @db.VarChar(20)
-
-  paciente     Paciente     @relation(fields: [id_paciente], references: [id_paciente])
-  profissional Profissional @relation(fields: [id_profissional], references: [id_profissional])
-  prontuarios  Prontuario[]
-}
-
-model Prontuario {
-  id_prontuario Int      @id @default(autoincrement())
-  id_consulta   Int
-  observacoes   String   @db.Text
-  receita       String   @db.Text
-  data          DateTime
-
-  consulta Consulta @relation(fields: [id_consulta], references: [id_consulta])
-}
-
-enum TipoUser {
-  admin
-  paciente
-  profissional
+model Booking {
+  id        String          @id @default(uuid())
+  userId    String
+  user      User            @relation(fields: [userId], references: [id])
+  serviceId String
+  service   HospitalService @relation(fields: [serviceId], references: [id])
+  date      DateTime
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
 }
