@@ -5,17 +5,36 @@ import { db } from "@/app/lib/prisma";
 
 interface HospitalPageProps {
     searchParams: {
-        search?: string;
+        title?: string;
+        services?: string;
     };
 }
 
 const HospitalPage = async ({ searchParams }: HospitalPageProps) => {
     const hospital = await db.hospital.findMany({
         where: {
-            name: {
-                contains: searchParams?.search,
-                mode: "insensitive",
-            },
+            OR: [
+                searchParams?.title
+                    ? {
+                          name: {
+                              contains: searchParams?.title,
+                              mode: "insensitive",
+                          },
+                      }
+                    : {},
+                searchParams?.services
+                    ? {
+                          services: {
+                              some: {
+                                  name: {
+                                      contains: searchParams?.services,
+                                      mode: "insensitive",
+                                  },
+                              },
+                          },
+                      }
+                    : {},
+            ],
         },
     });
 
@@ -27,7 +46,7 @@ const HospitalPage = async ({ searchParams }: HospitalPageProps) => {
             </div>
 
             <div className="px-5">
-                <h2>{`Resultados para "${searchParams?.search}"`}</h2>
+                <h2>{`Resultados para "${searchParams?.title || searchParams?.services}"`}</h2>
                 <div className="grid grid-cols-2 gap-4">
                     {hospital.map((hospital) => (
                         <HospitalItem key={hospital.id} hospital={hospital} />

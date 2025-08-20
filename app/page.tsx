@@ -8,6 +8,7 @@ import HospitalItem from "./components/ui/hospital-item";
 import { QuickSearchOptions } from "./_constants/search";
 import BookingItem from "./components/ui/booking-item";
 import Search from "./components/search";
+import Link from "next/link";
 
 const Home = async () => {
     //chamar banco de dados
@@ -35,14 +36,17 @@ const Home = async () => {
                             key={options.title}
                             className="gap-2"
                             variant="secondary"
+                            asChild
                         >
-                            <Image
-                                src={options.imageUrl}
-                                width={16}
-                                height={16}
-                                alt={options.title}
-                            />
-                            {options.title}
+                            <Link href={`/hospital?services=${options.title}`}>
+                                <Image
+                                    src={options.imageUrl}
+                                    width={16}
+                                    height={16}
+                                    alt={options.title}
+                                />
+                                {options.title}
+                            </Link>
                         </Button>
                     ))}
                 </div>
