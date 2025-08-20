@@ -1,13 +1,13 @@
-import { Input } from "@/components/ui/input";
 import Header from "./components/ui/header";
 import { Button } from "./components/ui/button";
-import { SearchIcon } from "lucide-react";
+
 import Image from "next/image";
 
 import { db } from "./lib/prisma";
 import HospitalItem from "./components/ui/hospital-item";
 import { QuickSearchOptions } from "./_constants/search";
 import BookingItem from "./components/ui/booking-item";
+import Search from "./components/search";
 
 const Home = async () => {
     //chamar banco de dados
@@ -24,11 +24,8 @@ const Home = async () => {
 
                 {/*Busca*/}
 
-                <div className="flex items-center gap-2 mt-6">
-                    <Input placeholder="Faça sua busca..." />
-                    <Button>
-                        <SearchIcon />
-                    </Button>
+                <div className="t-6">
+                    <Search />
                 </div>
 
                 {/*BUSCA RÁPIDA */}
